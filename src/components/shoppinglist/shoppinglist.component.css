@@ -1,0 +1,66 @@
+.shoppingList{
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputBox{
+    text-align: center;
+}
+
+#itemInputLabel{
+    font-size: large;
+    color: black;
+    font-family: monospace;
+    font-size: 30px;
+}
+
+#labelInput{
+    padding: 20px;
+    border-color: blueviolet;
+    border-radius: 5px;
+    text-transform: capitalize;
+    font-size: 20px;
+    color: blueviolet;
+
+}
+
+p{text-align: center;}
+
+#itemsList{
+   
+    display: flex;
+    flex-direction: column;
+    list-style-type:none;
+    padding: 0px;
+    height: 350px !important; 
+    width: 300px;
+    align-items:start; 
+    flex-wrap: wrap;
+
+}
+
+li{
+    height: 10%;
+    font-size: 20px;
+color: blueviolet;}
+
+/* input[type="checkbox"]
+{
+    vertical-align:middle; 
+    accent-color: blueviolet; 
+} */
+
+
+#buttonStyle{  
+    align-self: center;
+    font-family: monospace;
+    font-size: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    border-color: blueviolet;}
+
+#buttonStyle:hover{
+    background-color:#e6d7ff; ;
+}
