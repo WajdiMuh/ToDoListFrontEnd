@@ -1,62 +1,33 @@
-<div> 
-    <mat-toolbar >
-         <div fxShow="true" fxHide.gt-sm="true">
-             <button mat-icon-button (click)="sidenav.toggle()">
-                 <mat-icon>menu</mat-icon>
-             </button>
+<div style="display: flex; flex-direction: column; height: 100dvh;"> 
+  <mat-toolbar>
+    <div fxShow="true" fxHide.gt-sm="true">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+    </div>
+    <h1>{{selected_menu_item}}</h1>
+  </mat-toolbar>
+
+  <mat-sidenav-container>
+    <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over" opened="false" fxHide.gt-sm="true">
+      <mat-list>
+        <div *ngFor="let side_menu_item of SideNavMenuItem | keyvalue">
+          <mat-list-item class="listbuttons" 
+            [ngClass]="{'listbuttonselected': selected_menu_item === side_menu_item.value}" 
+            (click)="side_nav_item_click(side_menu_item.value)"
+            >
+              <p [ngClass]="{'listbuttontextsselected': selected_menu_item === side_menu_item.value}">
+                {{side_menu_item.value}}
+              </p>
+          </mat-list-item>
+          <mat-divider></mat-divider>
         </div>
-        <h1>Shopping List</h1>
+      </mat-list>
+    </mat-sidenav>
 
-    </mat-toolbar>
-
-    <mat-sidenav-container>
-
-      <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over"  opened="false" fxHide.gt-sm="true">
-        <div class="sidenav-wrapper">
-            <mat-list>
-              <mat-list-item>
-                  <button class="listbuttons">
-                    Shopping List
-                    </button>
-             
-              </mat-list-item>
-              <mat-divider></mat-divider>
-              <mat-list-item>
-                <button class="listbuttons"> Meal Plan test test test test test test</button>
-              </mat-list-item>
-            </mat-list>
-        </div>
-       
-      </mat-sidenav>
-
-      <mat-sidenav-content class="shoppingList">
-
-       
-        
-        <div class="card-container">
-
-            <div class="input-field-container">
-                <input class="labelInput" type="text" placeholder="Enter your item" [(ngModel)]="newItem">
-                <button class="inputButton" (click)="addItem()"type="submit">enter</button>  
-            </div>
-
-            <mat-card class="mat-card" appearance="outlined">
-                <mat-card-content class="scroll-wrapper">
-                    <mat-selection-list (selectionChange)="saveCheckedValue($event)" class="itemsList">
-                        <div class="color-selection">
-                            <mat-list-option *ngFor="let item of items" [value]="item.id" [selected]="item.checked">
-                                <span style="text-transform: capitalize;">{{ item.label }}</span>
-                              </mat-list-option>
-                        </div>
-                      </mat-selection-list>
-                </mat-card-content> 
-             </mat-card>
-
-             <button id="deleteButton" (click)="deleteCheckedItems()">
-                Delete checked items
-            </button>
-        </div>     
-        
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-  </div>
+    <mat-sidenav-content [ngSwitch]="selected_menu_item">
+      <app-shoppinglist *ngSwitchCase="SideNavMenuItem.Shopping_List"></app-shoppinglist>
+      <app-eventcalendar *ngSwitchCase="SideNavMenuItem.Weekly_Meal_Plan"></app-eventcalendar>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

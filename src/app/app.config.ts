@@ -17,7 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),     
     provideAnimations(),
     provideHttpClient(),
-    provideRouter(routes, withHashLocation()), provideAnimationsAsync(), provideAnimationsAsync(), provideAnimationsAsync(), provideAnimationsAsync(),
     
     // importProvidersFrom(
     //   CalendarModule.forRoot({

@@ -6,95 +6,64 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSelectionList, MatListModule, MatSelectionListChange} from '@angular/material/list';
+import { MatSelectionList, MatListModule} from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card'
 import { MatMenuModule } from '@angular/material/menu'
 
 import { MatCheckboxModule } from '@angular/material/checkbox'
-
-import {Item} from './../../interfaces/Item';
-import { ApiCalls } from '../../services/apiCalls';
+import { SideNavMenuItem } from '../enums/SideNavMenuItem';
+import { ShoppinglistComponent } from '../../components/shoppinglist/shoppinglist.component';
+import { WeeklyMealPlanComponent } from '../../components/weeklymealplan/weeklymealplan.component';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-homescreen',
   standalone: true,
-  imports: [MatMenuModule,MatListModule,FormsModule,CommonModule,MatButtonModule,MatToolbarModule,MatIconModule,MatSidenavModule,MatSelectionList, MatCardModule,MatCheckboxModule],
+  imports: [
+    MatMenuModule,
+    MatListModule,
+    FormsModule,
+    CommonModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatSelectionList, 
+    MatCardModule,
+    MatCheckboxModule,
+    ShoppinglistComponent,
+    WeeklyMealPlanComponent
+  ],
   templateUrl: './homescreen.component.html',
-  styleUrl: './homescreen.component.css'
+  styleUrl: './homescreen.component.css',
 })
 export class HomescreenComponent {
-  items:Item[] = [];
-  labels: string[] = [];
+  SideNavMenuItem = SideNavMenuItem;
+  selected_menu_item: SideNavMenuItem = SideNavMenuItem.Shopping_List;
+  side_item_subscription?: Subscription = undefined;
+  constructor(private route: ActivatedRoute){};
 
-  newItem : string = '';
-  id:number = 0;
-  itemList: Object;
-  checkedItemIds: number[] = [];
-  constructor(private apiCalls:ApiCalls){};
-
-  ngOnInit () {
-    this.apiCalls.fetchItems().subscribe(obj => {
-      let items:Item[] = <Item[]>obj;
-      this.items = this.items.concat(items);
-      this.checkedItemIds.push(...(items.filter(e => e.checked)).map(({ id }) => id));
-      console.log(this.checkedItemIds);
+  ngOnInit() {
+    this.route.data.subscribe(data => {
+      console.log(data);
+      this.selected_menu_item = data["side_item"];
     });
-    
+    console.log(SideNavMenuItem);
   }
 
-  addItem()
-  {
-    if(this.newItem == "")
+  ngOnDestroy() {
+    if(this.side_item_subscription == undefined)
     {
       return;
     }
-    
-    this.apiCalls.saveItems(this.newItem, false).subscribe(
-      () => {
-        this.apiCalls.fetchItems().subscribe(obj => {
-          let items:Item[] = <Item[]>obj;
-          this.items = items;
-          this.checkedItemIds.push(...(items.filter(e => e.checked)).map(({ id }) => id));
-          console.log(this.checkedItemIds);
-        });
-      }
-    );
-    for(let item of this.items) {
-      this.labels.push(item.label);
-    }
 
-
-    this.items.push({id : this.id++, label: this.newItem, checked: false});
-    this.newItem = '';
+    this.side_item_subscription?.unsubscribe();
   }
 
-
-  saveCheckedValue(event: MatSelectionListChange){
-    let id = event.options[0].value;
-    let item: Item = this.items.find(e=> e.id ==id)!;
-
-    item.checked = event.options[0].selected;
-    this.apiCalls.updateCheckedValue(id, item.checked).subscribe();
-    if (item.checked) {
-      if (!this.checkedItemIds.includes(id)) {
-        this.checkedItemIds.push(id);
-      }
-    } else {
-
-      const index = this.checkedItemIds.indexOf(id);
-      if (index !== -1) {
-        this.checkedItemIds.splice(index, 1);
-      }
-    } 
-    console.log(this.checkedItemIds);
-  }
-
-  deleteCheckedItems()
+  side_nav_item_click(side_nav_item: SideNavMenuItem)
   {
-    console.log("hi");
-    this.apiCalls.deleteItems(this.checkedItemIds).subscribe(obj => {
-    this.items = this.items.filter(e => !e.checked);
-    console.log(this.items.filter(e => !e.checked));})
+    console.log(side_nav_item);
+    this.selected_menu_item = side_nav_item;
   }
-
 }

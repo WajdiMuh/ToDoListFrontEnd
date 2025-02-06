@@ -1,36 +1,36 @@
-<div class="shoppingList">
-    <div class="inputBox">
-        <label id="itemInputLabel" for="addItem"> Add your items  </label>
-        <br>
-        <br>
-        <input id="labelInput" [(ngModel)]="newItem" type="text" (keyup.enter)="addItem()">
-    </div>
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let store of stores">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-checkbox
+                color="primary"
+                [checked]="(store.items.length != 0) && ((store.items | filterByImpure: ['checked']: true).length == store.items.length)"
+                [indeterminate]="((store.items | filterByImpure: ['checked']: true).length > 0) && 
+                ((store.items | filterByImpure: ['checked']: true).length < store.items.length)"
+                (change)="store_checkbox_click($event.checked, store)"
+                (click)="$event.stopPropagation();">
+                </mat-checkbox>
+                <div style="display: flex; flex-direction: column; align-items: start;">
+                    <h3 style="margin: 0px;display: inline;">{{store.name}}</h3>
+                    <p class="store-item-counter">{{(store.items | filterByImpure: ['checked']: true).length}}/{{store.items.length}}</p>
+                </div>
+            </mat-panel-title>
+            <mat-panel-description style="justify-content: end;">
+                <mat-icon class="store-icon" svgIcon="{{StoreType[store.type]}}"></mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-selection-list (selectionChange)="saveCheckedValue($event, store)" class="itemsList">
+            <mat-list-option disableRipple color="primary" *ngFor="let item of store.items" [value]="item.id" [selected]="item.checked">
+                <span class="option-text">{{ item.label }}</span>
+            </mat-list-option>
+        </mat-selection-list>
+        <div class="input-field-container">
+            <input class="labelInput" autocapitalize="none" enterkeyhint="enter" type="text" placeholder="Enter your item" (keyup.enter)="add_item_click(store)" [(ngModel)]="store.new_item">
+            <button class="inputButton" (click)="add_item_click(store)" type="submit">enter</button>  
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>
 
-    <div class="custom-search">
-        <input type="text" class="custom-search-input" placeholder="Enter your email">
-        <button class="custom-search-botton" type="submit">Subscribe</button>  
-      </div>
-   
-    <!-- <p *ngIf="items?.length == 0">
-    Your list is empty (thank god)
-    </p> -->
-
-    <!-- <div class="listDiv"> -->
-        <ul id="itemsList">
-            <li *ngFor="let item of items" >
-                <input type="checkbox" id="checkbox" [ngModel]="item.checked" (change)="saveCheckedValue($event, item.id)">
-                <label style="text-transform: capitalize;" for="checkbox"> {{item.label}} </label>
-            </li> 
-        </ul>
-    <!-- </div> -->
-    
-
-
-
-
-    <button id="buttonStyle" (click)="deleteCheckedItems()">
-        Delete checked items
-    </button>
-</div>
-
-<!-- Perserve items on refresh -->
+<button class="delete-button" mat-icon-button (click)="deleteCheckedItems()">
+    <mat-icon>delete</mat-icon>
+</button>

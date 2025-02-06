@@ -1,17 +1,16 @@
-
 mat-sidenav-content {
     background-color: white;
     display: flex;
     justify-content: center;
-    height: 100vh;
 }
 
 mat-sidenav-container {
-    height: 100vh;
+    height: 100%;
 }
 
 mat-sidenav {
-    width: 50vw;
+    width: 25%;
+    min-width: 200px;
     border-radius: 0px;
     padding: 0px;
 }
@@ -19,107 +18,6 @@ mat-sidenav {
 mat-toolbar {
     color: white;
     background-color: #b87791;
-    
-}
-
-mat-list-option > mat-checkbox-checked{
-    color: #28a745;
-}
-
-.mdc-checkbox__background{
-    background-color: red !important;
-}
-
-
-.sidenav-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-height: 60%;  /* Center align buttons horizontally */
-    gap: 10px;   
-}
-
-.input-field-container {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: row;
-    position: relative; 
-}
-
-.labelInput {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    padding: 10px 100px 10px 20px; 
-    line-height: 1;
-    box-sizing: border-box;
-    outline: none;
-}
-
-.inputButton {
-    position: absolute;
-    right: 3px; 
-    top: 3px;
-    bottom: 3px;
-    border: 0;
-    background: #b87791;
-    color: #fff;
-    outline: none;
-    margin: 0;
-    padding: 0 10px;
-    border-radius: 100px;
-    z-index: 2;
-}
-.card-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-height: 60%;
-}
-
-.mat-card{
-    border-radius: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 70vw;     
-
-}
-
-.scroll-wrapper {
-    border-radius: 10px;
-    max-height: 40vh;
-    overflow-y: auto;
-}
-
-#deleteButton {
-    background: #b87791;
-    color: #fff;
-    outline: none;
-    margin: 0;
-    padding: 10px 50px;
-    border-radius: 100px;
-}
-
-.listbuttons {
-    height: 100% !important;
-    display: flex !important;
-    align-items: stretch !important;
-    border: none;
-    width: 100% !important;
-    background-color: transparent;
-}
-
-mat-list-item .mdc-list-item__content {
-    height: 100% !important;
-    width: 100%;
-}
-
-
-.listbuttons:hover {
-    color: #ffffffe0;
-    background-color: #b877913a;
 }
 
 mat-list {
@@ -127,4 +25,24 @@ mat-list {
     width: 100% !important;
 }
 
+.listbuttonselected {
+    background-color: #b87791a2;
+}
 
+.listbuttontextsselected{
+    color: white;
+}
+
+mat-sidenav-content > *{
+    width: 80%;
+    min-width: 200px;
+}
+
+app-shoppinglist
+{
+    min-height: fit-content;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}

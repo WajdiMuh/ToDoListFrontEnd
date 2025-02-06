@@ -7,5 +7,3 @@ services:
     container_name: frontend_container
     ports:
       - "4200:4200"
-    volumes:
-      - ./:/usr/src/app
