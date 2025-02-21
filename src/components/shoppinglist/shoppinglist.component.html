@@ -19,15 +19,15 @@
                 <mat-icon class="store-icon" svgIcon="{{StoreType[store.type]}}"></mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <mat-selection-list (selectionChange)="saveCheckedValue($event, store)" class="itemsList">
-            <mat-list-option disableRipple color="primary" *ngFor="let item of store.items" [value]="item.id" [selected]="item.checked">
-                <span class="option-text">{{ item.label }}</span>
-            </mat-list-option>
-        </mat-selection-list>
         <div class="input-field-container">
             <input class="labelInput" autocapitalize="none" enterkeyhint="enter" type="text" placeholder="Enter your item" (keyup.enter)="add_item_click(store)" [(ngModel)]="store.new_item">
             <button class="inputButton" (click)="add_item_click(store)" type="submit">enter</button>  
         </div>
+        <mat-selection-list [disableRipple]="true" (selectionChange)="saveCheckedValue($event, store)" class="itemsList">
+            <mat-list-option disableRipple color="primary" *ngFor="let item of store.items" [value]="item.id" [selected]="item.checked">
+                <span class="option-text">{{ item.label }}</span>
+            </mat-list-option>
+        </mat-selection-list>
     </mat-expansion-panel>
 </mat-accordion>
 

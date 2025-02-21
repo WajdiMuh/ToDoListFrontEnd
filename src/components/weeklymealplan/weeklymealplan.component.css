@@ -1,64 +1,163 @@
-/* .event-color-c {
-    display: flex;
-    margin: 16px;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .event-color-label {
-    flex: 1 0 auto;
-  }
-  
-  .event-color {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    margin-right: 10px;
-    margin-left: 240px;
-    background: #5ac8fa;
-  }
-  
-  .crud-color-row {
-    display: flex;
-    justify-content: center;
-    margin: 5px;
-  }
-  
-  .crud-color-c {
-    padding: 3px;
-    margin: 2px;
-  }
-  
-  .crud-color {
-    position: relative;
-    min-width: 46px;
-    min-height: 46px;
-    margin: 2px;
-    cursor: pointer;
-    border-radius: 23px;
-    background: #5ac8fa;
-  }
-  
-  .crud-color-c.selected,
-  .crud-color-c:hover {
-    box-shadow: inset 0 0 0 3px #007bff;
-    border-radius: 48px;
-  }
-  
-  .crud-color:before {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -10px;
-    margin-left: -10px;
-    color: #f7f7f7;
-    font-size: 20px;
-    text-shadow: 0 0 3px #000;
-    display: none;
-  }
-  
-  .crud-color-c.selected .crud-color:before {
-    display: block;
-  }
-   
- */
+::ng-deep .cal-week-view .cal-time-events {
+  display: none !important;
+}
+
+::ng-deep .cal-week-view .cal-day-headers {
+  padding-left: 0;
+  flex-direction: column;
+  border: 0px;
+}
+
+::ng-deep .cal-week-view .cal-today {
+  background-color: #b87791;
+}
+
+::ng-deep .cal-week-view {
+  border: 0px;
+  flex-grow: 1;
+  height: 100%;
+  min-height: fit-content;
+}
+
+::ng-deep .cal-week-view .cal-header{
+  overflow: unset;
+}
+
+
+::ng-deep .cal-week-view .cal-day-headers .cal-header:not(:last-child)  {
+  border: unset;
+}
+
+.day-container{
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  width: 25%;
+  min-width: 100px;
+  background-color: #b87791;
+  color: white;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.meal-text{
+  margin: 0px;
+  font-weight: bold;
+}
+
+.input-field-container {
+  display: flex;
+  flex-direction: row;
+  position: relative; 
+  margin-left: 8px;
+}
+
+.labelInput {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 10px 60px 10px 20px; 
+  line-height: 1;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.inputButton {
+  position: absolute;
+  right: 3px; 
+  top: 3px;
+  bottom: 3px;
+  border: 0;
+  background: #b87791;
+  color: #fff;
+  outline: none;
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 100px;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.week-seek-button{
+  color: #b87791;
+  font-weight: bolder;
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.week-seek-button-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.delete-button {
+  color: #b87791;
+}
+
+::ng-deep .cal-week-view .cal-day-headers .cal-header:hover{
+  background-color: unset;
+}
+
+.main-container{
+  display: flex; 
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: center;
+  height: 100%;
+  min-height: fit-content !important;
+  touch-action: pan-y !important;
+}
+
+mwl-calendar-week-view{
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: fit-content;
+}
+
+::ng-deep mwl-calendar-week-view-header{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: fit-content;
+}
+
+table{
+  height: 100%;
+}
+
+::ng-deep .mat-elevation-z8, .mat-mdc-elevation-specific.mat-elevation-z8{
+  box-shadow: unset;
+}
+
+mat-form-field , form{
+  width: initial !important;
+  width: 100% !important;
+  min-width: unset !important;
+}
+
+::ng-deep .mat-mdc-form-field-infix{
+  width: auto !important;
+}
+
+::ng-deep .mat-mdc-icon-button{
+  border-radius: 0px !important;
+}
+
+.week-number{
+  display: flex; 
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.mat-column-date{
+  width: 10%;
+  min-width: 100px;
+}

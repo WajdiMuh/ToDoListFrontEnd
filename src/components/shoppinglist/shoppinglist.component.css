@@ -9,7 +9,7 @@
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 20px;
-    padding: 10px 100px 10px 20px; 
+    padding: 10px 60px 10px 20px; 
     line-height: 1;
     box-sizing: border-box;
     outline: none;
@@ -94,4 +94,14 @@ mat-panel-title{
     margin-top: 4px;
     font-size: smaller;
     color: #b87791;
+}
+
+.mdc-list-item:hover::before, .mdc-list-item:focus::before{
+    background-color: unset !important;
+}
+
+mat-checkbox, mat-list-option {
+    --mdc-checkbox-selected-icon-color: #b87791 !important;
+    --mdc-checkbox-selected-hover-icon-color: #b87791 !important;
+    --mdc-checkbox-selected-focus-icon-color: #b87791 !important;
 }

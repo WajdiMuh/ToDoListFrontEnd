@@ -10,7 +10,8 @@ mat-sidenav-container {
 
 mat-sidenav {
     width: 25%;
-    min-width: 200px;
+    min-width: 180px;
+    max-width: 350px;
     border-radius: 0px;
     padding: 0px;
 }
@@ -33,11 +34,6 @@ mat-list {
     color: white;
 }
 
-mat-sidenav-content > *{
-    width: 80%;
-    min-width: 200px;
-}
-
 app-shoppinglist
 {
     min-height: fit-content;
@@ -45,4 +41,25 @@ app-shoppinglist
     padding-bottom: 40px;
     padding-left: 20px;
     padding-right: 20px;
+    width: 80%;
+    min-width: 200px;
+}
+
+app-eventcalendar{
+    width: 100%;
+}
+
+.spinner-container{
+    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    left: 0; 
+    right: 0; 
+    top: 0;
+    bottom: 0;
+    margin: auto; 
 }

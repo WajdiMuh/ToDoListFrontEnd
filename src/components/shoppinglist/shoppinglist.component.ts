@@ -15,6 +15,7 @@ import { MatIcon, MatIconModule, MatIconRegistry } from '@angular/material/icon'
 import { StoreType, StoreTypeIcon } from '../../app/enums/StoreType';
 import { HttpClientModule } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SpinnerService } from '../../services/spinner.service';
 
 @Component({
   selector: 'app-shoppinglist',
@@ -43,7 +44,8 @@ export class ShoppinglistComponent {
   constructor(
     private apiCalls:ApiCalls,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private spinner_service:SpinnerService
   ){
     for(let [store_type, store_type_url] of StoreTypeIcon){
       this.matIconRegistry.addSvgIcon(
@@ -54,9 +56,11 @@ export class ShoppinglistComponent {
   };
 
   ngOnInit () {
+    this.spinner_service.start_spinner();
     this.apiCalls.fetchItems().subscribe(obj => {
       let items:Item[] = <Item[]>obj;
       this.stores[0].items = items;
+      this.spinner_service.stop_spinner();
     });
   }
 
@@ -65,7 +69,10 @@ export class ShoppinglistComponent {
     let item: Item = store.items.find(e=> e.id ==id)!;
 
     item.checked = event.options[0].selected;
-    this.apiCalls.updateCheckedValue(id, item.checked).subscribe();
+    this.spinner_service.start_spinner();
+    this.apiCalls.updateCheckedValue(id, item.checked).subscribe(() => {
+      this.spinner_service.stop_spinner();
+    });
   }
 
   deleteCheckedItems()
@@ -77,20 +84,25 @@ export class ShoppinglistComponent {
       checkedIDs = checkedIDs.concat(store.items.filter(e => e.checked).map(({ id }) => id));
     }
 
+    this.spinner_service.start_spinner();
     this.apiCalls.deleteItems(checkedIDs).subscribe(() => {
       for(var store of this.stores)
       {
         store.items = store.items.filter(e => !e.checked);
       }
+      this.spinner_service.stop_spinner();
     })
   }
 
   store_checkbox_click(checked: boolean, store:Store)
   {
+    this.spinner_service.start_spinner();
     for(var item of store.items)
     {
       item.checked = checked;
-      this.apiCalls.updateCheckedValue(item.id, item.checked).subscribe();
+      this.apiCalls.updateCheckedValue(item.id, item.checked).subscribe(() => {
+        this.spinner_service.stop_spinner();
+      });
     }
   }
 
@@ -100,11 +112,14 @@ export class ShoppinglistComponent {
     {
       return;
     }
-      
+     
+    this.spinner_service.start_spinner();
+
     this.apiCalls.saveItems(store.new_item, false).subscribe(() => {
         this.apiCalls.fetchItems().subscribe(obj => {
           let items:Item[] = <Item[]>obj;
           this.stores[0].items = items;
+          this.spinner_service.stop_spinner();
         });
       }
     );

@@ -26,6 +26,10 @@
     </mat-sidenav>
 
     <mat-sidenav-content [ngSwitch]="selected_menu_item">
+      <div *ngIf="spinner_state" class="spinner-container">
+        <mat-spinner>
+        </mat-spinner>
+      </div>
       <app-shoppinglist *ngSwitchCase="SideNavMenuItem.Shopping_List"></app-shoppinglist>
       <app-eventcalendar *ngSwitchCase="SideNavMenuItem.Weekly_Meal_Plan"></app-eventcalendar>
     </mat-sidenav-content>

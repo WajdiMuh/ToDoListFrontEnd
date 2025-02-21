@@ -1,10 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
-html, body { 
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+:root {
+    touch-action: pan-x pan-y;
     height: 100%;
-    width: 100%;
 }
 
-body { margin: 0;  overflow: hidden; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { height: 100%; }
+
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 ::-webkit-scrollbar {
     width: 5px;
@@ -15,4 +19,8 @@ body { margin: 0;  overflow: hidden; font-family: Roboto, "Helvetica Neue", sans
     -webkit-border-radius: 15px;
     border-radius: 15px;
     background: #b87791;
+}
+
+* {
+    touch-action: manipulation;
 }
