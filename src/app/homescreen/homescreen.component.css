@@ -50,16 +50,21 @@ app-eventcalendar{
 }
 
 .spinner-container{
-    position: absolute;
+    position: fixed;
     width: 100% !important;
     height: 100% !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 10;
     left: 0; 
     right: 0; 
     top: 0;
     bottom: 0;
     margin: auto; 
+    pointer-events: none !important;
+}
+
+:host ::ng-deep .no-touch * {
+    pointer-events: none !important; 
 }

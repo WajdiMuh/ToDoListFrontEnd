@@ -56,11 +56,13 @@ export class ShoppinglistComponent {
   };
 
   ngOnInit () {
-    this.spinner_service.start_spinner();
-    this.apiCalls.fetchItems().subscribe(obj => {
-      let items:Item[] = <Item[]>obj;
-      this.stores[0].items = items;
-      this.spinner_service.stop_spinner();
+    setTimeout(() => {
+      this.spinner_service.start_spinner();
+      this.apiCalls.fetchItems().subscribe(obj => {
+        let items:Item[] = <Item[]>obj;
+        this.stores[0].items = items;
+        this.spinner_service.stop_spinner();
+      });
     });
   }
 

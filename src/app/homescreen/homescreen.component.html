@@ -25,7 +25,7 @@
       </mat-list>
     </mat-sidenav>
 
-    <mat-sidenav-content [ngSwitch]="selected_menu_item">
+    <mat-sidenav-content [ngClass]="{'no-touch': spinner_state}" [ngSwitch]="selected_menu_item">
       <div *ngIf="spinner_state" class="spinner-container">
         <mat-spinner>
         </mat-spinner>
