@@ -104,10 +104,10 @@ export class ShoppinglistComponent {
     })
   }
 
-  store_checkbox_click(checked: boolean, store:Store)
+  store_checkbox_click(checked: boolean, items:Item[])
   {
     this.spinner_service.start_spinner();
-    for(var item of store.items)
+    for(var item of items)
     {
       item.checked = checked;
       this.apiCalls.updateCheckedValue(item.id, item.checked).subscribe(() => {

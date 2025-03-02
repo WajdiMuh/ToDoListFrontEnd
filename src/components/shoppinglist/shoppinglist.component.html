@@ -1,23 +1,24 @@
 <mat-form-field subscriptSizing="dynamic" class="search-bar">
     <mat-label>Search Item</mat-label>
-    <input  placeholder="Search" name="search" matInput [(ngModel)]="search_text">
+    <input placeholder="Search" name="search" matInput [(ngModel)]="search_text">
 </mat-form-field>
 
 <mat-accordion>
     <mat-expansion-panel *ngFor="let store of stores">
+        @let store_items_filtered = (store.items | filterByImpure: ['label']: search_text);
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <mat-checkbox
                 color="primary"
-                [checked]="(store.items.length != 0) && ((store.items | filterByImpure: ['checked']: true).length == store.items.length)"
-                [indeterminate]="((store.items | filterByImpure: ['checked']: true).length > 0) && 
-                ((store.items | filterByImpure: ['checked']: true).length < store.items.length)"
-                (change)="store_checkbox_click($event.checked, store)"
+                [checked]="(store_items_filtered.length != 0) && ((store_items_filtered | filterByImpure: ['checked']: true).length == store_items_filtered.length)"
+                [indeterminate]="((store_items_filtered | filterByImpure: ['checked']: true).length > 0) && 
+                ((store_items_filtered | filterByImpure: ['checked']: true).length < store_items_filtered.length)"
+                (change)="store_checkbox_click($event.checked, store_items_filtered)"
                 (click)="$event.stopPropagation();">
                 </mat-checkbox>
                 <div style="display: flex; flex-direction: column; align-items: start;">
                     <h3 style="margin: 0px;display: inline;">{{store.name}}</h3>
-                    <p class="store-item-counter">{{(store.items | filterByImpure: ['checked']: true).length}}/{{store.items.length}}</p>
+                    <p class="store-item-counter">{{(store_items_filtered | filterByImpure: ['checked']: true).length}}/{{store_items_filtered.length}}</p>
                 </div>
             </mat-panel-title>
             <mat-panel-description style="justify-content: end;">
@@ -29,7 +30,7 @@
             <button class="inputButton" (click)="add_item_click(store)" type="submit">enter</button>  
         </div>
         <mat-selection-list [disableRipple]="true" (selectionChange)="saveCheckedValue($event, store)" class="itemsList">
-            <mat-list-option disableRipple color="primary" *ngFor="let item of store.items" [value]="item.id" [selected]="item.checked">
+            <mat-list-option disableRipple color="primary" *ngFor="let item of store_items_filtered" [value]="item.id" [selected]="item.checked">
                 <span class="option-text">{{ item.label }}</span>
             </mat-list-option>
         </mat-selection-list>

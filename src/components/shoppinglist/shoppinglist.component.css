@@ -113,6 +113,14 @@ mat-checkbox, mat-list-option {
     width: 100%;
     z-index: 100;
     margin-bottom: 40px;
+    --mdc-filled-text-field-container-color: #b87791 !important;
+    --mdc-filled-text-field-label-text-color: white !important;
+    --mdc-filled-text-field-hover-label-text-color: white !important;
+    --mdc-filled-text-field-input-text-color: white !important;
+    --mdc-filled-text-field-caret-color: white !important;
+    --mdc-filled-text-field-focus-label-text-color: white !important;
+    --mdc-filled-text-field-input-text-placeholder-color: white !important;
+    --mdc-filled-text-field-container-shape: 0 !important;
 }
 
 mat-accordion{
