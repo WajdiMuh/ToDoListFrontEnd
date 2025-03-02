@@ -1,3 +1,8 @@
+<mat-form-field subscriptSizing="dynamic" class="search-bar">
+    <mat-label>Search Item</mat-label>
+    <input  placeholder="Search" name="search" matInput [(ngModel)]="search_text">
+</mat-form-field>
+
 <mat-accordion>
     <mat-expansion-panel *ngFor="let store of stores">
         <mat-expansion-panel-header>

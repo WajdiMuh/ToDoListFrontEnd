@@ -16,6 +16,8 @@ import { StoreType, StoreTypeIcon } from '../../app/enums/StoreType';
 import { HttpClientModule } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SpinnerService } from '../../services/spinner.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-shoppinglist',
@@ -31,6 +33,9 @@ import { SpinnerService } from '../../services/spinner.service';
     MatExpansionModule,
     NgArrayPipesModule,
     MatIconModule,
+    FormsModule, 
+    MatFormFieldModule, 
+    MatInputModule
   ],
   templateUrl: './shoppinglist.component.html',
   styleUrl: './shoppinglist.component.css',
@@ -41,6 +46,9 @@ export class ShoppinglistComponent {
   stores: Store[] = [
     {name: "Miscellaneous", type: StoreType.Miscellaneous, items: []},
   ];
+
+  search_text: string = "";
+
   constructor(
     private apiCalls:ApiCalls,
     private matIconRegistry: MatIconRegistry,

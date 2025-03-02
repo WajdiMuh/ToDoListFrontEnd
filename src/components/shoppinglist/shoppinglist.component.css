@@ -75,7 +75,6 @@ mat-list-option{
 
 mat-expansion-panel{
     border-radius: 25px !important;
-    /* background: #b87791; */
 }
 
 mat-expansion-panel:not(:last-child){
@@ -104,4 +103,23 @@ mat-checkbox, mat-list-option {
     --mdc-checkbox-selected-icon-color: #b87791 !important;
     --mdc-checkbox-selected-hover-icon-color: #b87791 !important;
     --mdc-checkbox-selected-focus-icon-color: #b87791 !important;
+}
+
+.search-bar{
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    z-index: 100;
+    margin-bottom: 40px;
+}
+
+mat-accordion{
+    min-width: 200px;
+    width: 80%;
+    margin-bottom: 40px !important;
+    margin-left: 20px;
+    margin-right: 20px;
+    align-self: center;
 }
