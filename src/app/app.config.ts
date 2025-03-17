@@ -4,7 +4,6 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { ApiCalls } from '../services/apiCalls';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HAMMER_LOADER, HammerModule } from '@angular/platform-browser';

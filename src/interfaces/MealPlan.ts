@@ -1,5 +1,6 @@
 export interface MealPlan
 {
-    name: string;
-    date: Date;
+    id: number;
+    label: string;
+    mealDate: Date;
 }

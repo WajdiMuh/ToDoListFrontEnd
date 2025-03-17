@@ -2,5 +2,6 @@ export interface Item
 {
   id: number
   label:string
-  checked: boolean
+  checked: boolean,
+  storeid: number
 }

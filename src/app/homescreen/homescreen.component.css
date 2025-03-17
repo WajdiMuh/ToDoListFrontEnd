@@ -65,3 +65,7 @@ app-eventcalendar{
 :host ::ng-deep .no-touch * {
     pointer-events: none !important; 
 }
+
+mat-spinner{
+    --mdc-circular-progress-active-indicator-color: #b87791;
+}
