@@ -15,13 +15,20 @@ import {MatInputModule} from '@angular/material/input';
 import { WeekDay } from 'calendar-utils';
 import { parse, getDay, getWeek, GetWeekOptions, getYear } from 'date-fns';
 import { weekly_meal_plan_api_calls } from '../../services/weekly_meal_plan_api_calls';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Data, Route, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { routes } from '../../app/app.routes';
+import { SideNavMenuItem } from '../../app/enums/SideNavMenuItem';
 
 const week_options:GetWeekOptions = {
   weekStartsOn: 1,
   firstWeekContainsDate: 4
 }
+
+const WEEK_VIEW_DATA:string = 'week_view';
+const YEAR_DATA:string = 'year';
+const CALENDER_WEEK_DATA:string = 'calender_week';
+
 
 @Component({
   standalone: true,
@@ -56,17 +63,36 @@ export class WeeklyMealPlanComponent {
   groupedColumns: string[] = ['grouped'];
   displayedColumns: string[] = ['date', 'name'];
 
-  console = console;
+  weekly_meal_plan_index = routes.findIndex(route => route.data!["side_item"] == SideNavMenuItem.Weekly_Meal_Plan)!;
+
 
   constructor(private spinner_service:SpinnerService, private apiCalls:weekly_meal_plan_api_calls, private route: ActivatedRoute, private router: Router,  private location: Location ) {}
   ngOnInit () {
-    this.route.queryParams.subscribe(data => {
-      if(Object.keys(data).length !== 0)
+    
+    if(routes[this.weekly_meal_plan_index].data![WEEK_VIEW_DATA] != undefined)
+    {
+      this.viewDate = parse(routes[this.weekly_meal_plan_index].data![WEEK_VIEW_DATA][CALENDER_WEEK_DATA] + '', "I", new Date().setFullYear(routes[this.weekly_meal_plan_index].data![WEEK_VIEW_DATA][YEAR_DATA]));
+    } 
+    else if(Object.keys(this.route.snapshot.queryParams).length !== 0)
+    {
+      this.viewDate = parse(this.route.snapshot.queryParams[CALENDER_WEEK_DATA], "I", new Date().setFullYear(this.route.snapshot.queryParams[YEAR_DATA]));
+    }
+
+    this.week_number = getWeek(this.viewDate, week_options);
+
+    let weekview:Data = {
+      [YEAR_DATA]: getYear(this.viewDate),
+      [CALENDER_WEEK_DATA]: this.week_number
+    }
+    const urlTree = this.router.createUrlTree(
+      ['/WeeklyMealPlan'], 
       {
-        this.viewDate = parse(data["calender_week"], "I", new Date().setFullYear(data["year"]));
-        this.week_number = getWeek(this.viewDate, week_options);
+        queryParams: weekview,
       }
-    });
+    );
+
+    this.location.go(urlTree.toString());
+
     setTimeout(() => {
       this.spinner_service.start_spinner();
       this.apiCalls.getMealsInWeek(getYear(this.viewDate), this.week_number).subscribe(meal_plans => {
@@ -82,17 +108,18 @@ export class WeeklyMealPlanComponent {
     this.new_meal_strings = new Array(7).fill('');
     this.viewDate.setDate(this.viewDate.getDate() + offset);
     this.week_number = getWeek(this.viewDate, week_options);
+    let weekview:Data = {
+      [YEAR_DATA]: getYear(this.viewDate),
+      [CALENDER_WEEK_DATA]: this.week_number
+    }
     const urlTree = this.router.createUrlTree(
       ['/WeeklyMealPlan'], 
       {
-        queryParams: {
-          year: getYear(this.viewDate),
-          calender_week: this.week_number
-        },
-        queryParamsHandling: 'merge'
+        queryParams: weekview,
       }
     );
     this.location.go(urlTree.toString());
+    routes[this.weekly_meal_plan_index].data![WEEK_VIEW_DATA] = weekview;
     this.spinner_service.start_spinner();
     this.apiCalls.getMealsInWeek(getYear(this.viewDate), this.week_number).subscribe(meal_plans => {
       this.meal_plans = meal_plans;
