@@ -4,7 +4,8 @@
 </mat-form-field>
 
 <mat-accordion>
-    <mat-expansion-panel *ngFor="let store of stores; ; trackBy: trackByStoreId">
+    @let stores_filtered = (search_text == "") ? stores : (stores | filterByImpure: ['items.label']: search_text);
+    <mat-expansion-panel *ngFor="let store of stores_filtered; trackBy: trackByStoreId">
         @let store_items_filtered = (store.items | filterByImpure: ['label']: search_text);
         <mat-expansion-panel-header>
             <mat-panel-title>
