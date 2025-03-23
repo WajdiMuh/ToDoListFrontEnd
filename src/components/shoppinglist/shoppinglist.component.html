@@ -3,8 +3,9 @@
     <input placeholder="Search" name="search" matInput [(ngModel)]="search_text">
 </mat-form-field>
 
-<mat-accordion>
-    @let stores_filtered = (search_text == "") ? stores : (stores | filterByImpure: ['items.label']: search_text);
+@let stores_filtered = (search_text == "") ? stores : (stores | filterByImpure: ['items.label']: search_text);
+
+<mat-accordion *ngIf="stores_filtered.length != 0">
     <mat-expansion-panel *ngFor="let store of stores_filtered; trackBy: trackByStoreId">
         @let store_items_filtered = (store.items | filterByImpure: ['label']: search_text);
         <mat-expansion-panel-header>
@@ -37,6 +38,8 @@
         </mat-selection-list>
     </mat-expansion-panel>
 </mat-accordion>
+
+<h3 *ngIf="(stores_filtered.length == 0) && (search_text != '')" style="margin: auto;">No Results Found</h3>
 
 <button class="delete-button" mat-icon-button (click)="deleteCheckedItems()">
     <mat-icon>delete</mat-icon>
