@@ -18,6 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SpinnerService } from '../../services/spinner.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-shoppinglist',
@@ -35,7 +36,9 @@ import { MatInputModule } from '@angular/material/input';
     MatIconModule,
     FormsModule, 
     MatFormFieldModule, 
-    MatInputModule
+    MatInputModule,
+    MatAutocompleteModule,
+
   ],
   templateUrl: './shoppinglist.component.html',
   styleUrl: './shoppinglist.component.css',

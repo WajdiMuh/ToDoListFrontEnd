@@ -1,6 +1,11 @@
 <mat-form-field subscriptSizing="dynamic" class="search-bar">
     <mat-label>Search Item</mat-label>
-    <input placeholder="Search" name="search" matInput [(ngModel)]="search_text">
+    <input placeholder="Search" name="search" matInput [matAutocomplete]="auto" [(ngModel)]="search_text">
+    <mat-autocomplete autoActiveFirstOption  #auto="matAutocomplete">
+        @for (option of (stores | pluck: 'items' | flatten | filterByImpure: ['label']: search_text) ; track option.id) {
+          <mat-option [value]="option.label">{{option.label}}</mat-option>
+        }
+    </mat-autocomplete>
 </mat-form-field>
 
 @let stores_filtered = (search_text == "") ? stores : (stores | filterByImpure: ['items.label']: search_text);
