@@ -2,17 +2,17 @@
     <mat-label>Search Item</mat-label>
     <input placeholder="Search" name="search" matInput [matAutocomplete]="auto" [(ngModel)]="search_text">
     <mat-autocomplete autoActiveFirstOption  #auto="matAutocomplete">
-        @for (option of (stores | pluck: 'items' | flatten | filterByImpure: ['label']: search_text) ; track option.id) {
+        @for (option of (stores | pluck: 'items' | flatten | orderBy: 'label' | filterByImpure: ['label']: search_text) ; track option.id) {
           <mat-option [value]="option.label">{{option.label}}</mat-option>
         }
     </mat-autocomplete>
 </mat-form-field>
 
-@let stores_filtered = (search_text == "") ? stores : (stores | filterByImpure: ['items.label']: search_text);
+@let stores_filtered = (search_text == "") ? (stores | orderBy: 'name') : (stores | orderBy: 'name' | filterByImpure: ['items.label']: search_text);
 
 <mat-accordion *ngIf="stores_filtered.length != 0">
     <mat-expansion-panel *ngFor="let store of stores_filtered; trackBy: trackByStoreId">
-        @let store_items_filtered = (store.items | filterByImpure: ['label']: search_text);
+        @let store_items_filtered = (store.items | orderBy: 'label' | filterByImpure: ['label']: search_text);
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <mat-checkbox
