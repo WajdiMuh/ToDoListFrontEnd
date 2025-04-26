@@ -19,6 +19,7 @@ import { SpinnerService } from '../../services/spinner.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shoppinglist',
@@ -49,6 +50,8 @@ export class ShoppinglistComponent {
   stores: Store[] = [];
 
   search_text: string = "";
+  
+  private socketSubscription: Subscription;
 
   constructor(
     private apiCalls:shopping_list_api_calls,
@@ -65,15 +68,25 @@ export class ShoppinglistComponent {
   };
 
   trackByStoreId = (index: number, store: Store) => store.id;
+  trackByItemId = (index: number, item: Item) => item.id;
 
   ngOnInit () {
     setTimeout(() => {
       this.spinner_service.start_spinner();
-      this.apiCalls.fetchStores().subscribe(stores => {
+      this.socketSubscription = this.apiCalls.fetchStores().subscribe(stores => {
         this.stores = stores;
         this.spinner_service.stop_spinner();
       });
+      this.apiCalls.connectToStoreSocket();
     });
+  }
+
+  ngOnDestroy() {
+    if(this.socketSubscription != undefined)
+    {
+      this.socketSubscription.unsubscribe();
+    }
+    this.apiCalls.disconnectFromStoreSocket();
   }
 
   saveCheckedValue(event: MatSelectionListChange, store: Store){
@@ -85,9 +98,7 @@ export class ShoppinglistComponent {
       [id, item.checked],
     ]);
     this.spinner_service.start_spinner();
-    this.apiCalls.updateCheckedValue(id_checked_map).subscribe(() => {
-      this.spinner_service.stop_spinner();
-    });
+    this.apiCalls.updateCheckedValue(id_checked_map);
   }
 
   deleteCheckedItems()
@@ -100,13 +111,7 @@ export class ShoppinglistComponent {
     }
 
     this.spinner_service.start_spinner();
-    this.apiCalls.deleteItems(checkedIDs).subscribe(() => {
-      for(var store of this.stores)
-      {
-        store.items = store.items.filter(e => !e.checked);
-      }
-      this.spinner_service.stop_spinner();
-    })
+    this.apiCalls.deleteItems(checkedIDs);
   }
 
   store_checkbox_click(checked: boolean, items:Item[])
@@ -120,9 +125,7 @@ export class ShoppinglistComponent {
     }
 
     this.spinner_service.start_spinner();
-    this.apiCalls.updateCheckedValue(id_checked_map).subscribe(() => {
-      this.spinner_service.stop_spinner();
-    });
+    this.apiCalls.updateCheckedValue(id_checked_map);
   }
 
   add_item_click(store:Store)
@@ -141,13 +144,7 @@ export class ShoppinglistComponent {
       storeid: store.id
     };
 
-    this.apiCalls.saveItems(new_item).subscribe(() => {
-        this.apiCalls.fetchStores().subscribe(stores => {
-          this.stores = stores;
-          this.spinner_service.stop_spinner();
-        });
-      }
-    );
+    this.apiCalls.saveItems(new_item);
 
     store.new_item = undefined;
   }

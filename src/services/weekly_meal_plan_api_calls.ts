@@ -1,43 +1,63 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Item } from '../interfaces/Item';
 import { MealPlan } from '../interfaces/MealPlan';
 import { format, set, toDate } from 'date-fns';
 import { environment } from '../environments/environment';
+import { io, Socket } from 'socket.io-client';
 
 @Injectable({providedIn: 'root'})
 export class weekly_meal_plan_api_calls {
+    private socket: Socket;
+    constructor(){
+        this.socket = io(environment.backendURL + '/meal', {
+            autoConnect: false
+        });
+    }
 
-    constructor(private http: HttpClient){}
+    connectToMealSocket()
+    {
+        if(this.socket.connected)
+        {
+            this.socket.disconnect();
+        }
+        this.socket.connect();
+    }
 
-    addMeal(new_meal_plan: MealPlan): Observable<Object>{
+    disconnectFromMealSocket()
+    {
+        this.socket.disconnect();
+    }
+
+    addMeal(new_meal_plan: MealPlan){
         var meal_plan_formatted:any = new_meal_plan;
         meal_plan_formatted["mealDate"] = format(new_meal_plan.mealDate, 'yyyy-MM-dd');
-        return this.http.post(environment.backendURL+ '/meal/add', meal_plan_formatted);
+        this.socket.emit('add', meal_plan_formatted)
     }
 
     getMealsInWeek(year: number, calender_week: number): Observable<MealPlan[]>
     {
-        return this.http.get<MealPlan[]>(environment.backendURL+ '/meal/getMealsInWeek', {
-            params: {
-                "year": year,
-                "calenderWeek": calender_week
-            }
-        }).pipe(
-            map((res:MealPlan[]) => {
-                res.forEach((item) => item.mealDate = set(toDate(item.mealDate), { hours: 0 }));
-                return res;
-            })
-        );
+        this.socket.offAny();
+
+        this.socket.emit('getMealsInWeek', {
+            "year": year,
+            "calenderWeek": calender_week
+        });
+
+        return new Observable<MealPlan[]>((observer) => {
+            this.socket.on(`getMealsInWeek/year/${year}/calenderWeek/${calender_week}`, (data: MealPlan[]) => {
+                data.forEach((item) => item.mealDate = set(toDate(item.mealDate), { hours: 0 }));
+                observer.next(data);
+            });
+    
+            // Handle cleanup
+            return () => {
+            this.socket.off(`getMealsInWeek/year/${year}/calenderWeek/${calender_week}`);
+            };
+        });
     }
 
-    deleteMeal(id:number) : Observable<void> {
-        return this.http.delete<void>(environment.backendURL+ '/meal/delete', {
-            params: {
-                "id": id
-            }
-        });
+    deleteMeal(id:number){
+        this.socket.emit('delete', id);
     }
 
 }

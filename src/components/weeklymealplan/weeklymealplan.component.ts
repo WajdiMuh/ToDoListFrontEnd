@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'angular-calendar';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {MealPlan} from './../../interfaces/MealPlan';
 import { NgArrayPipesModule } from 'ngx-pipes';
 import { MatIconModule } from '@angular/material/icon';
@@ -65,6 +65,7 @@ export class WeeklyMealPlanComponent {
 
   weekly_meal_plan_index = routes.findIndex(route => route.data!["side_item"] == SideNavMenuItem.Weekly_Meal_Plan)!;
 
+  private socketSubscription: Subscription;
 
   constructor(private spinner_service:SpinnerService, private apiCalls:weekly_meal_plan_api_calls, private route: ActivatedRoute, private router: Router,  private location: Location ) {}
   ngOnInit () {
@@ -95,12 +96,21 @@ export class WeeklyMealPlanComponent {
 
     setTimeout(() => {
       this.spinner_service.start_spinner();
-      this.apiCalls.getMealsInWeek(getYear(this.viewDate), this.week_number).subscribe(meal_plans => {
+      this.apiCalls.connectToMealSocket();
+      this.socketSubscription = this.apiCalls.getMealsInWeek(getYear(this.viewDate), this.week_number).subscribe(meal_plans => {
         this.meal_plans = meal_plans;
         this.calendar_refresher.next();
         this.spinner_service.stop_spinner();
       });
     });
+  }
+
+  ngOnDestroy() {
+    if(this.socketSubscription != undefined)
+    {
+      this.socketSubscription.unsubscribe();
+    }
+    this.apiCalls.disconnectFromMealSocket();
   }
 
   week_move_click(offset: number)
@@ -121,7 +131,13 @@ export class WeeklyMealPlanComponent {
     this.location.go(urlTree.toString());
     routes[this.weekly_meal_plan_index].data![WEEK_VIEW_DATA] = weekview;
     this.spinner_service.start_spinner();
-    this.apiCalls.getMealsInWeek(getYear(this.viewDate), this.week_number).subscribe(meal_plans => {
+
+    if(this.socketSubscription != undefined)
+    {
+      this.socketSubscription.unsubscribe();
+    }
+
+    this.socketSubscription = this.apiCalls.getMealsInWeek(getYear(this.viewDate), this.week_number).subscribe(meal_plans => {
       this.meal_plans = meal_plans;
       this.calendar_refresher.next();
       this.spinner_service.stop_spinner();
@@ -131,10 +147,7 @@ export class WeeklyMealPlanComponent {
   delete_meal_plan(meal_plan: MealPlan)
   {
     this.spinner_service.start_spinner();
-    this.apiCalls.deleteMeal(meal_plan.id).subscribe(() => {
-      this.meal_plans.splice(this.meal_plans.indexOf(meal_plan), 1);
-      this.spinner_service.stop_spinner();
-    });
+    this.apiCalls.deleteMeal(meal_plan.id);
     let day = getDay(meal_plan.mealDate);
     this.new_meal_strings = this.new_meal_strings.fill('', day, day + 1);
   }
@@ -149,14 +162,7 @@ export class WeeklyMealPlanComponent {
       mealDate: meal_date.date
     };
 
-    this.apiCalls.addMeal(new_meal_plan).subscribe(() => {
-      this.apiCalls.getMealsInWeek(getYear(this.viewDate), this.week_number).subscribe(meal_plans => {
-        this.meal_plans = meal_plans;
-        this.calendar_refresher.next();
-        this.spinner_service.stop_spinner();
-      });
-      }
-    );
+    this.apiCalls.addMeal(new_meal_plan);
 
   }
 

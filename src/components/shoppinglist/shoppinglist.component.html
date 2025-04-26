@@ -37,7 +37,7 @@
             <button class="inputButton" (click)="add_item_click(store)" type="submit">enter</button>  
         </div>
         <mat-selection-list [disableRipple]="true" (selectionChange)="saveCheckedValue($event, store)" class="itemsList">
-            <mat-list-option disableRipple color="primary" *ngFor="let item of store_items_filtered" [value]="item.id" [selected]="item.checked">
+            <mat-list-option disableRipple color="primary" *ngFor="let item of store_items_filtered; trackBy: trackByItemId" [value]="item.id" [selected]="item.checked">
                 <span class="option-text">{{ item.label }}</span>
             </mat-list-option>
         </mat-selection-list>
