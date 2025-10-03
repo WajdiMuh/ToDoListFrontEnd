@@ -1,32 +1,13 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Item } from '../interfaces/Item';
-import { environment } from '../environments/environment';
 import { Store } from '../interfaces/Store';
-import { io, Socket } from 'socket.io-client';
+import { socket_api_calls } from './socket_api_calls';
 
 @Injectable({providedIn: 'root'})
-export class shopping_list_api_calls {
-    private socket: Socket;
+export class shopping_list_api_calls extends socket_api_calls {
     constructor(){
-        this.socket = io(environment.backendURL + '/store', {
-            autoConnect: false
-        });
-    }
-
-    connectToStoreSocket()
-    {
-        if(this.socket.connected)
-        {
-            this.socket.disconnect();
-        }
-        this.socket.connect();
-    }
-
-    disconnectFromStoreSocket()
-    {
-        this.socket.disconnect();
+        super('/store');
     }
 
     fetchStores(): Observable<Store[]> {

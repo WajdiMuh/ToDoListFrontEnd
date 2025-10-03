@@ -19,6 +19,7 @@ import { ActivatedRoute, Data, Route, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { routes } from '../../app/app.routes';
 import { SideNavMenuItem } from '../../app/enums/SideNavMenuItem';
+import { SOCKET_TIMEOUT } from '../../services/socket_api_calls';
 
 const week_options:GetWeekOptions = {
   weekStartsOn: 1,
@@ -95,8 +96,8 @@ export class WeeklyMealPlanComponent {
     this.location.go(urlTree.toString());
 
     setTimeout(() => {
-      this.spinner_service.start_spinner();
-      this.apiCalls.connectToMealSocket();
+      this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
+      this.apiCalls.connect();
       this.socketSubscription = this.apiCalls.getMealsInWeek(getYear(this.viewDate), this.week_number).subscribe(meal_plans => {
         this.meal_plans = meal_plans;
         this.calendar_refresher.next();
@@ -110,7 +111,7 @@ export class WeeklyMealPlanComponent {
     {
       this.socketSubscription.unsubscribe();
     }
-    this.apiCalls.disconnectFromMealSocket();
+    this.apiCalls.disconnect();
   }
 
   week_move_click(offset: number)
@@ -130,7 +131,7 @@ export class WeeklyMealPlanComponent {
     );
     this.location.go(urlTree.toString());
     routes[this.weekly_meal_plan_index].data![WEEK_VIEW_DATA] = weekview;
-    this.spinner_service.start_spinner();
+    this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
 
     if(this.socketSubscription != undefined)
     {
@@ -146,7 +147,7 @@ export class WeeklyMealPlanComponent {
 
   delete_meal_plan(meal_plan: MealPlan)
   {
-    this.spinner_service.start_spinner();
+    this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
     this.apiCalls.deleteMeal(meal_plan.id);
     let day = getDay(meal_plan.mealDate);
     this.new_meal_strings = this.new_meal_strings.fill('', day, day + 1);
@@ -154,7 +155,7 @@ export class WeeklyMealPlanComponent {
 
   add_meal_plan(meal_date:WeekDay)
   {
-    this.spinner_service.start_spinner();
+    this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
 
     let new_meal_plan:MealPlan = {
       id: 0,

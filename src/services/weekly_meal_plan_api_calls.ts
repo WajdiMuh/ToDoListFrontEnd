@@ -1,31 +1,13 @@
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { MealPlan } from '../interfaces/MealPlan';
 import { format, set, toDate } from 'date-fns';
-import { environment } from '../environments/environment';
-import { io, Socket } from 'socket.io-client';
+import { socket_api_calls } from './socket_api_calls';
 
 @Injectable({providedIn: 'root'})
-export class weekly_meal_plan_api_calls {
-    private socket: Socket;
+export class weekly_meal_plan_api_calls extends socket_api_calls {
     constructor(){
-        this.socket = io(environment.backendURL + '/meal', {
-            autoConnect: false
-        });
-    }
-
-    connectToMealSocket()
-    {
-        if(this.socket.connected)
-        {
-            this.socket.disconnect();
-        }
-        this.socket.connect();
-    }
-
-    disconnectFromMealSocket()
-    {
-        this.socket.disconnect();
+        super('/meal');
     }
 
     addMeal(new_meal_plan: MealPlan){

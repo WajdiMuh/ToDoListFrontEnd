@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
+import { SOCKET_TIMEOUT } from '../../services/socket_api_calls';
 
 @Component({
   selector: 'app-shoppinglist',
@@ -72,12 +73,12 @@ export class ShoppinglistComponent {
 
   ngOnInit () {
     setTimeout(() => {
-      this.spinner_service.start_spinner();
+      this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
       this.socketSubscription = this.apiCalls.fetchStores().subscribe(stores => {
         this.stores = stores;
         this.spinner_service.stop_spinner();
       });
-      this.apiCalls.connectToStoreSocket();
+      this.apiCalls.connect();
     });
   }
 
@@ -86,7 +87,7 @@ export class ShoppinglistComponent {
     {
       this.socketSubscription.unsubscribe();
     }
-    this.apiCalls.disconnectFromStoreSocket();
+    this.apiCalls.disconnect();
   }
 
   saveCheckedValue(event: MatSelectionListChange, store: Store){
@@ -97,7 +98,7 @@ export class ShoppinglistComponent {
     let id_checked_map = new Map<number, boolean>([
       [id, item.checked],
     ]);
-    this.spinner_service.start_spinner();
+    this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
     this.apiCalls.updateCheckedValue(id_checked_map);
   }
 
@@ -110,7 +111,7 @@ export class ShoppinglistComponent {
       checkedIDs = checkedIDs.concat(store.items.filter(e => e.checked).map(({ id }) => id));
     }
 
-    this.spinner_service.start_spinner();
+    this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
     this.apiCalls.deleteItems(checkedIDs);
   }
 
@@ -124,7 +125,7 @@ export class ShoppinglistComponent {
       id_checked_map.set(item.id, checked);
     }
 
-    this.spinner_service.start_spinner();
+    this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
     this.apiCalls.updateCheckedValue(id_checked_map);
   }
 
@@ -135,7 +136,7 @@ export class ShoppinglistComponent {
       return;
     }
      
-    this.spinner_service.start_spinner();
+    this.spinner_service.start_spinner(undefined, SOCKET_TIMEOUT);
 
     let new_item:Item = {
       id: 0,
